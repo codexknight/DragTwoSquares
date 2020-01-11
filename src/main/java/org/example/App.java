@@ -5,6 +5,7 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -52,6 +53,13 @@ public class App extends Application {
         stage.show();
     }
 
+    private boolean dragging;
+
+    private SquareData draggedSquare;
+
+    private double offsetX, offsetY;
+
+
     private void mouseReleasead(MouseEvent e) {
     }
 
@@ -59,6 +67,34 @@ public class App extends Application {
     }
 
     private void mousePressed(MouseEvent e) {
+        if (dragging) {
+            return;
+        }
+        double x = e.getX();
+        double y = e.getY();
+
+        if (e.isShiftDown() || e.getButton() == MouseButton.SECONDARY) {
+            for (int i = squares.size() - 1; i >= 0; i--) {
+                SquareData squareData = squares.get(i);
+                double cx = squareData.x;
+                double cy = squareData.y;
+                if (x >= cx - 50 && x <= cx + 50 && y >= cy - 50 && y <= cy + 50) {
+                    dragging = true;
+                    draggedSquare = squareData;
+                    offsetX = x - cx;
+                    offsetY = y - cy;
+                    break;
+                }
+            }
+        } else {
+            SquareData squareData = new SquareData();
+            squareData.x = x;
+            squareData.y = y;
+            squareData.color = Color.color(Math.random(), Math.random(), Math.random(), 0.5 + 0.5 * Math.random());
+            squares.add(squareData);
+            draw();
+            
+        }
     }
 
     private void draw() {
