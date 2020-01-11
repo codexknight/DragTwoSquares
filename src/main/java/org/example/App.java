@@ -41,7 +41,7 @@ public class App extends Application {
 
         canvas.setOnMousePressed(e -> mousePressed(e));
         canvas.setOnMouseDragged(e -> mouseDragged(e));
-        canvas.setOnMouseReleased(e -> mouseReleasead(e));
+        canvas.setOnMouseReleased(e -> mouseReleased(e));
 
         Pane root = new Pane(canvas);
 
@@ -60,7 +60,20 @@ public class App extends Application {
     private double offsetX, offsetY;
 
 
-    private void mouseReleasead(MouseEvent e) {
+    private void mouseReleased(MouseEvent e) {
+        if (!dragging) {
+            return;
+
+        }
+        if (draggedSquare.x > canvas.getWidth() + 50 ||
+                draggedSquare.x < -50 ||
+                draggedSquare.y > canvas.getHeight() + 50 ||
+                draggedSquare.y < -50) {
+            squares.remove(draggedSquare);
+            System.out.println("Removed square; list size = " + squares.size());
+        }
+        dragging = false;
+        draggedSquare = null;
     }
 
     private void mouseDragged(MouseEvent e) {
