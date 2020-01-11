@@ -64,6 +64,16 @@ public class App extends Application {
     }
 
     private void mouseDragged(MouseEvent e) {
+        if (!dragging) {
+            return;
+        }
+        double x = e.getX();
+        double y = e.getY();
+
+        draggedSquare.x = x - offsetX;
+        draggedSquare.y = y - offsetY;
+
+        draw();
     }
 
     private void mousePressed(MouseEvent e) {
@@ -93,7 +103,7 @@ public class App extends Application {
             squareData.color = Color.color(Math.random(), Math.random(), Math.random(), 0.5 + 0.5 * Math.random());
             squares.add(squareData);
             draw();
-            
+
         }
     }
 
